@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>관리자 게시판</title>
+</head>
+<body>
+    <div>
+        <a href="/write">작성하기</a>
+        <table>
+            <tr>
+                <th>번호</th><th>제목</th><th>작성자</th><th>날짜</th>
+            </tr>
+            <tr th:each="board : ${boardList}">
+                <td th:text="${board.idx}"></td>
+                <td>
+                    <a th:href="@{managerContent?idx=}+${board.idx}" th:text="${board.title}"></a>
+                </td>
+                <td th:text="${board.managerId}"></td>
+                <td th:text="board.writeDay"></td>
+            </tr>
+        </table>
+        <form action="/managerboard" method="get">
+            <select name="page" id="selectPage">
+            </select>
+            <select name="size" id="selectSize">
+                <option th:each="size : ${numbers.sequence(1,5)}" th:value="${size*10}" th:label="${size*10}"></option>
+            </select>
+            <button>페이지 이동</button>
+        </form>
+    </div>
+</body>
+    <script>
+        /*<![CDATA[*/
+        let nowSize="${nowSize}"/10;
+        let nowPage="${nowPage}"-1;
+        let selectSize=document.getElementById("selectSize");
+        let selectPage= document.getElementById("selectPage");
+        selectSize.onchange(()=>{
+            let size=this.selectedIndex+1;
+            let pageList=Math.floor("${allCount}"/size)+1;
+            selectPage.removeChild()
+            for(let i=0; i<pageList; i++){
+                let optionPage=document.createElement("option");
+                optionPage.setAttribute("value",i);
+                optionPage.setAttribute("label",i+1);
+                selectPage.appendChild(optionPage);
+            }
+        });
+        selectSize.options[nowSize].selected=true;
+        selectPage.options[nowPage].selected=true;
+        /*]]>*/
+    </script>
+</html>

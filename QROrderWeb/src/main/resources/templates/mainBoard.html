@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>게시판</title>
+</head>
+<body>
+    <div>
+        <header><a href="/shopeManagement">매점관리</a><a href="/logOut">로그아웃</a></header>
+        <table>
+            <tr>
+                <th>번호</th><th>제목</th><th>작성자</th><th>날짜</th>
+            </tr>
+            <tr th:each="board : ${boardList}">
+                <td th:text="${board.idx}"></td>
+                <td>
+                    <a th:href="@{mainContent?idx=}+${board.idx}" th:text="${board.title}"></a>
+                </td>
+                <td th:text="${board.managerId}"></td>
+                <td th:text="board.writeDay"></td>
+            </tr>
+        </table>
+        <p>
+            <span th:if="${startPage != 1}"><a href="@{/mainBoard?page=}+${startPage-2}">이전</a></span>
+            <span th:each="page:${numbers.sequence(startPage,endPage)}">
+                <strong th:if="${page == nowPage}" th:text="${page}"></strong>
+                <a th:if="${page != nowPage}" href="@{/managerBoard?page=}+${page-1}" th:text="${page}"></a>
+            </span>
+            <span th:if="${endPage != totalPage}"><a href="@{/managerBoard?page=}+${page}">다음</a></span>
+        </p>
+    </div>
+</body>
+</html>

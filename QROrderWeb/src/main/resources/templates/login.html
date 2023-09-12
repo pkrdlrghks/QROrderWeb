@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>로그인</title>
+</head>
+<body>
+    <div>
+        <button class="seter" data-action="/sellerJoin" data-set="회원 로그인">회원 로그인</button>
+        <button class="seter" data-action="/managerJoin" data-set="관리자 로그인">관리자 로그인</button>
+        <p id="formSet">회원 로그인</p>
+        <nav>
+            <form action="/sellerJoin" method="post" id="form">
+                <table>
+                    <tr>
+                        <td>아이디</td><td><input type="text" name="id"></td>
+                    </tr>
+                    <tr>
+                        <td>비밀번호</td><td><input type="password" name="pass"></td>
+                    </tr>
+                </table>
+                <button>로그인</button>
+            </form>
+        </nav>
+        <p th:if="${not #strings.isEmpty(erreMessage)}" th:text="${erreMessage}"></p>
+    </div>
+</body>
+    <script th:inline="javascript">
+         /*<![CDATA[*/
+            document.getElementsByClassName("seter").onclick(()=>{
+                let action=this.getAttribute("data-action");
+                let set=this.getAttribute("data-set");
+                document.getElementById("formSet").setAttribute("value",set);
+                document.getElementById("form").setAttribute("action",action);
+            })
+         /*]]>*/
+    </script>
+</html>

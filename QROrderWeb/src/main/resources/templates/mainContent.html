@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>게시판</title>
+</head>
+<body>
+    <header><a href="">매점관리</a><a href="">로그아웃</a></header>
+    <div>
+        <a href="/mainBoard">돌아가기</a>
+        <h3 th:text="${boardList.title}"></h3>
+        <textarea cols="30" rows="10" th:text="${boardList.contents}" readonly></textarea>
+    </div>
+</body>
+</html>

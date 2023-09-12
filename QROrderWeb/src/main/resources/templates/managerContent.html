@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>관리자 공지사항</title>
+</head>
+<body>
+  <h3 th:text="${board.title}"></h3>
+  <form method="post">
+     <input type="hidden" name="title" th:value="${board.title}">
+     <input type="hidden" name="idx" th:value="${board.idx}">
+     <textarea name="contents" cols="30" rows="10" th:value="${board.contents}"></textarea>
+     <button type="submit" formaction="/boardUpdate">수정하기</button>
+     <button type="submit" formaction="/boardDelete">삭제하기</button>
+  </form>
+</body>
+</html>

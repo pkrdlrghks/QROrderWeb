@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>메뉴</title>
+</head>
+<body>
+    <header><h1 th:text="${shName}"></h1></header>
+    <nav>
+        <button id="all">전체메뉴</button>
+        <button th:each="type : ${metype}" th:data-type="${type}" th:value="${type}" class="menubtn"></button>
+        <div th:each="orderMenu : ${menuList}" th:class="${orderMenu.metype}+@{ goods}">
+            <img th:src="@{img/}+${orderMenu.shnum*1000+orderMenu.menum}+@{.png}">
+            <p th:text="${orderMenu.mename}"></p>
+            <p th:text="${orderMenu.prise}"></p>
+            <button 
+                th:data-idxme="${orderMenu.idxme}"
+                th:data-mename="${orderMenu.mename}"
+                th:data-prise="${orderMenu.prise}"
+                class="contain" onclick="">담기</button>
+
+        </div>
+    </nav>
+    <nav>
+        <form action="">
+            <table>
+                <tr>
+                    <th>제품</th><th>가격</th><th>삭제</th>
+                </tr>
+                <tbody id="cart">
+                        
+                </tbody>
+            </table>
+            <input type="number" value="${param.shnum}">
+            <input type="text" value="주문하기">
+        </form>
+    </nav>
+    <script slot="./js/orderMenu.js"></script>
+</body>
+</html>

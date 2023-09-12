@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>회원 가입</title>
+</head>
+<body>
+    <h3>가게 등록</h3>
+    <form action="/shopeMake" method="post">
+        <p>가게 이름 : <input type="text" name="shname"></p>
+        <p>비밀번호 : <input type="password" name="shpass"></p>
+        <p>전화번호 : <input type="number" name="shtell"></p>
+        <p>가게주소 : <input type="text" name="shaddr"></p>
+        <input type="submit" value="등록하기">
+    </form>
+</body>
+</html>

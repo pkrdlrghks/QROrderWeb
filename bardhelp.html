@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>임시 장바구니</title>
+</head>
+<body>
+  <h1>임시 장바구니</h1>
+  <div class="items">
+    <div class="item">
+      <h2>상품명</h2>
+      <p>가격</p>
+      <p>수량</p>
+      <p>합계</p>
+      <button class="delete">삭제</button>
+    </div>
+  </div>
+  <button id="add-item">상품 추가</button>
+  <button id="checkout">결제</button>
+  <script>
+    // 장바구니에 저장된 상품 목록
+const items = [];
+
+// 상품 추가 버튼 클릭 이벤트 핸들러
+document.getElementById("add-item").addEventListener("click", function() {
+  // 상품명, 가격, 수량을 입력받는 팝업창을 띄웁니다.
+  const input = prompt("상품명, 가격, 수량을 입력하세요.");
+
+  // 입력받은 값을 분석하여 장바구니에 저장합니다.
+  const data = input.split(",");
+  const item = {
+    name: data[0],
+    price: parseInt(data[1]),
+    quantity: parseInt(data[2]),
+  };
+  items.push(item);
+
+  // 장바구니 목록을 새로고침합니다.
+  renderItems();
+});
+
+// 결제 버튼 클릭 이벤트 핸들러
+document.getElementById("checkout").addEventListener("click", function() {
+  // 장바구니에 저장된 상품 목록을 출력합니다.
+  console.log(items);
+});
+
+// 장바구니 목록을 출력하는 함수
+function renderItems() {
+  // 장바구니 목록을 초기화합니다.
+  const itemsContainer = document.querySelector(".items");
+  itemsContainer.innerHTML = "";
+
+  // 장바구니에 저장된 상품 목록을 순회하여 출력합니다.
+  for (const item of items) {
+    const itemContainer = document.createElement("div");
+    itemContainer.className = "item";
+
+    // 상품명
+    const name = document.createElement("h2");
+    name.textContent = item.name;
+    itemContainer.appendChild(name);
+
+    // 가격
+    const price = document.createElement("p");
+    price.textContent = item.price + "원";
+    itemContainer.appendChild(price);
+
+    // 수량
+    const quantity = document.createElement("p");
+    quantity.textContent = item.quantity;
+    itemContainer.appendChild(quantity);
+
+    // 합계
+    const total = document.createElement("p");
+    total.textContent = item.price * item.quantity + "원";
+    itemContainer.appendChild(total);
+
+    // 상품 삭제 버튼
+    const deleteButton = document.createElement("button");
+    deleteButton.className = "delete";
+    deleteButton.textContent = "삭제";
+    deleteButton.addEventListener("click", function() {
+      // 해당 상품을 장바구니에서 제거합니다.
+      items.splice(items.indexOf(item), 1);
+
+      // 장바구니 목록을 새로고침합니다.
+      renderItems();
+    });
+    itemContainer.appendChild(deleteButton);
+
+    itemsContainer.appendChild(itemContainer);
+  }
+}
+
+// 장바구니 목록을 초기화합니다.
+renderItems();
+  </script>
+</body>
+</html>

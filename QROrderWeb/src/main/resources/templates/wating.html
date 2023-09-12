@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>주문목록</title>
+    <script th:inline="javascript">
+         /*<![CDATA[*/
+        let watingNum='[[${watingNum}]]';
+        let channel=new WebSocket("ws://" + location.host + "/channel");
+        channel.onConnect=function(frame){
+            setConnected(true);
+            let PersonList=channel.subscribe("PersonList",setPersonNum);
+        }
+        function setPersonNum(message){
+            if(!message.indexof(watingNum)){
+                console,console.log('주문한 음식이 나왔습니다.');
+                return;
+            }
+            let watingCount=document.getElementsByClassName("watingCount");
+            let count= message.filer(setCount).length;
+            watingCount.setAttribute("text",count);
+        }
+        function setCount(member){
+            
+            if(member<watingNum){
+                return true;
+            }
+        }
+        
+         /*]]>*/
+    </script>
+</head>
+<body>
+<header><h1>지점명</h1> <a href="">로그인</a></header>
+<h3 class="watingCount"></h3>
+<h3 th:text="@{대기번호 : }+${watingNum}"></h3>
+<table>
+    <tr>
+        <th>메뉴명</th><th>가격</th>
+    </tr>
+    <tr th:each="order: ${orderList}">
+        <td th:text="${order.mename}"></td>
+        <td th:text="${order.prise}"></td>
+    </tr>
+</table>
+</body>
+</html>

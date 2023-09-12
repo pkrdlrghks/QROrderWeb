@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>메점 관리</title>
+</head>
+<body>
+<header><h1 th:text="${shName}"></h1> <a href="">영업 시작</a></header>
+<nav>
+  <button id="all">메뉴추가</button>
+  <button th:each="type : ${metype}" th:data-type="${type}" th:value="${type}" class="menubtn"></button>
+  <div th:each="orderMenu : ${menuList}" th:class="${orderMenu.metype}+@{ goods}">
+    <img th:src="@{img/}+${orderMenu.shnum*1000+orderMenu.menum}+@{.png}">
+    <p th:text="${orderMenu.mename}"></p>
+    <p th:text="${orderMenu.prise}"></p>
+    <button
+            th:data-idxme="${orderMenu.idxme}"
+            class="contain" onclick="">삭제</button>
+
+  </div>
+</nav>
+<script>
+
+</script>
+</body>
+</html>
