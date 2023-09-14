@@ -7,6 +7,13 @@
 <body>
 <header><h1 th:text="${shName}"></h1> <a href="">영업 시작</a></header>
 <nav>
+  <form action="/addMenue" method="post">
+    <p>메뉴 이름 : <input type="text" name="mename"></p>
+    <p>메뉴 가격 : <input type="number" name="prise"></p>
+    <p>메뉴 종류 : <input type="text" name="type"></p>
+    <p>메뉴 사진 : <input type="image" name="image"></p>
+    <input type="hidden" name="shnum" th:value="${shnum}"></p>
+  </form>
   <button id="all">메뉴추가</button>
   <button th:each="type : ${metype}" th:data-type="${type}" th:value="${type}" class="menubtn"></button>
   <div th:each="orderMenu : ${menuList}" th:class="${orderMenu.metype}+@{ goods}">

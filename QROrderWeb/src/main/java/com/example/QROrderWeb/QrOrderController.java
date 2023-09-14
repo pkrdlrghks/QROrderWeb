@@ -7,19 +7,28 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.web.JsonPath;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static org.springframework.data.repository.init.ResourceReader.Type.JSON;
 
 @Controller
 public class QrOrderController {
@@ -64,10 +73,11 @@ public class QrOrderController {
         model.addAttribute("orderList",order);
         model.addAttribute("shnum",shnum);
         model.addAttribute("watingNum",watingNum);
+        orderHere(order, shnum);
         return "wating";
     }
 
-    @MessageMapping("waitingPersons")
+    @MessageMapping("/waitingPersons")
     @SendTo("/PersonList")
     public int[] waitingPerson(){
         int[] watingPerson= watingListRepository.watingPerson();
@@ -217,7 +227,52 @@ public class QrOrderController {
         String shName=shopeRepository.findById(shnum).get().getShname();
         model.addAttribute("menuList",menuList);
         model.addAttribute("shName",shName);
-        return "shopemanagement";
+        model.addAttribute("shnum",shnum);
+        return "shopeManagement";
+    }
+    @GetMapping("/managementDelete/{idxme}")
+    public String managementDelete(@PathVariable Integer idx){
+        menueRepository.deleteById(idx);
+        return "shopeManagement";
+    }
+    @PostMapping("/addMenue")
+    public String addMenue(HttpServletRequest request) throws IOException {
+        String mename=request.getAttribute("mename").toString();
+        String type=request.getAttribute("mename").toString();
+        Integer prise=(Integer) request.getAttribute("prise");
+        Integer shnum=(Integer) request.getAttribute("shnum");
+        MultipartFile img=(MultipartFile) request.getAttribute("img");
+        Integer menum=menueRepository.findMaxmenue(shnum)+1;
+        String location="C:\\programerpark\\portfolio\\QROrderWeb\\QROrderWeb\\src\\main\\resources\\static";
+        String imgName= String.valueOf(shnum*1000+menum);
+        File file=new File(location,imgName);
+        img.transferTo(file);
+        menue menue=new menue();
+        menue.setMenum(menum);
+        menue.setMename(mename);
+        menue.setPrise(prise);
+        menue.setShnum(shnum);
+        menue.setMetype(type);
+        menueRepository.save(menue);
+        return "shopeManagement";
+    }
+
+    @SendTo("/orderHere/{shnum}")
+    public List<watingList> orderHere(List<watingList> order, @DestinationVariable Integer shnum){
+        return order;
+    }
+
+    @GetMapping("/open")
+    public String open(HttpServletRequest request,Model model){
+        HttpSession session=request.getSession();
+        Integer shnum=(Integer) session.getAttribute("shnum");
+        model.addAttribute("shnum",shnum);
+        return "open";
+    }
+    @MessageMapping("/orderComplete")
+    public void orderComplete(@Payload String watingNum){
+        watingListRepository.updateComplete(watingNum);
+        waitingPerson();
     }
 
 

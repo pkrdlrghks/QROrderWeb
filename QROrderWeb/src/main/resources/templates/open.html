@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>주문 목록</title>
+    <script th:inline="javascript">
+         /*<![CDATA[*/
+        let shnum="${shnum}";
+        let channel=new WebSocket("ws://" + location.host + "/channel");
+        channel.onConnect=function(frame){
+            setConnected(true);
+            let PersonList=channel.subscribe("/orderHere/${shnum}",addOrderList);
+        }
+        function addOrderList(message){
+            let watingNum=message[0].watingNum;
+            let orderList=document.getElementById("orderList");
+            let parentTr=document.createElement("tr")
+            let tdWatingNum=document.createElement("td")
+            tdWatingNum.textContent=watingNum;
+            parentTr.appendChild(tdWatingNum);
+            let tdTableBox=document.createElement("td");
+            let childTable=document.createElement("table");
+            for(order of message){
+                let trOrderLine=document.createElement("tr")
+                let tdMename=document.createElement("td");
+                tdMename.textContent=order.mename;
+                let tdPrise=document.createElement("td");
+                tdPrise.textContent=order.prise;
+                trOrderLine.appendChild(tdMename);
+                trOrderLine.appendChild(tdPrise);
+                childTable.appendChild(trOrderLine);
+            }
+            tdTableBox.appendChild(childTable);
+            parentTr.appendChild(tdTableBox);
+            let tdComplete=document.createElement("td");
+            let buComplete=document.createElement("button");
+            buComplete.setAttribute("data-watingNum",watingNum);
+            buComplete.addEventListener("onClick",complete);
+            buComplete.textContent="완성"
+            orderList.appendChild(parentTr);
+        }
+
+        function complete(){
+            let watingNum=this.data-watingNum;
+            stompClient.publish({
+                destination:"/orderComplete",
+                body : JSON.stringify({watingNum : watingNum})
+            });
+            this.style.color='gray';
+            this.removeEventListener("onClick");
+        }
+         /*]]>*/
+    </script>
+</head>
+<body>
+<header><a href="/logOut">로그인 아웃</a></header>
+<table id="orderList">
+    
+</table>
+</body>
+</html>

@@ -15,4 +15,6 @@ public interface WatingListRepository extends CrudRepository<watingList, Integer
     @Query(value = "select watingNum from watingList where complete=false group by watingNum")
     int[] watingPerson();
 
+    @Query(value = "update watingList set complete=true where watingNum=?1")
+    void updateComplete(String watingNum);
 }
