@@ -3,16 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <title>주문 목록</title>
-    <script th:inline="javascript">
+
+</head>
+<body>
+<header><a href="/logOut">로그인 아웃</a></header>
+<table id="orderList">
+    
+</table>
+</body>
+<script th:inline="javascript">
          /*<![CDATA[*/
-        let shnum="${shnum}";
+        let shnum="[[${shnum}]]";
         let channel=new WebSocket("ws://" + location.host + "/channel");
         channel.onConnect=function(frame){
             setConnected(true);
             let PersonList=channel.subscribe("/orderHere/${shnum}",addOrderList);
         }
         function addOrderList(message){
-            let watingNum=message[0].watingNum;
+            let watingNum=message[0].watingNum;S
             let orderList=document.getElementById("orderList");
             let parentTr=document.createElement("tr")
             let tdWatingNum=document.createElement("td")
@@ -51,11 +59,4 @@
         }
          /*]]>*/
     </script>
-</head>
-<body>
-<header><a href="/logOut">로그인 아웃</a></header>
-<table id="orderList">
-    
-</table>
-</body>
 </html>

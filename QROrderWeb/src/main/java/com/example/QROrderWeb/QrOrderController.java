@@ -44,7 +44,7 @@ public class QrOrderController {
     @GetMapping("/orderMenu")
     public String orderMenuList(@RequestParam Integer shnum, Model model){
         List<menue> menuList=menueRepository.findByShnum(shnum);
-        List<String> metype=menueRepository.countMetype();
+        List<String> metype=menueRepository.Metype(shnum);
         String shName=shopeRepository.findById(shnum).get().getShname();
         model.addAttribute("menuList",menuList);
         model.addAttribute("metype",metype);
@@ -102,7 +102,7 @@ public class QrOrderController {
         }else {
             HttpSession session=request.getSession();
             session.setAttribute("shnum",shope.getShnum());
-            tothe= "main";
+            tothe= "mainBoard";
         }
         return tothe;
     }
@@ -123,7 +123,7 @@ public class QrOrderController {
         }else {
             HttpSession session=request.getSession();
             session.setAttribute("userId",manager.getUserId());
-            tothe= "mainBoard";
+            tothe= "managerBoard";
         }
         return tothe;
     }

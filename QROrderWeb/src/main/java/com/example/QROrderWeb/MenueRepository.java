@@ -8,9 +8,9 @@ import java.util.Optional;
 
 public interface MenueRepository extends CrudRepository<menue, Integer> {
 
-    List<menue> findByShnum(Integer sh_num);
-    @Query("select DISTINCT count(metype) metypeCount from menue")
-    List<String> countMetype();
+    List<menue> findByShnum(Integer shnum);
+    @Query("select DISTINCT metype from menue where shnum=?1")
+    List<String> Metype(Integer shnum);
 
     @Query("select max(menum) as maxmenum from menum where shnum=?1")
     Integer findMaxmenue(Integer shnum);

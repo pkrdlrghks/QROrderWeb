@@ -3,32 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>주문목록</title>
-    <script th:inline="javascript">
-         /*<![CDATA[*/
-        let watingNum='[[${watingNum}]]';
-        let channel=new WebSocket("ws://" + location.host + "/channel");
-        channel.onConnect=function(frame){
-            setConnected(true);
-            let PersonList=channel.subscribe("PersonList",setPersonNum);
-        }
-        function setPersonNum(message){
-            if(!message.indexof(watingNum)){
-                console,console.log('주문한 음식이 나왔습니다.');
-                return;
-            }
-            let watingCount=document.getElementsByClassName("watingCount");
-            let count= message.filer(setCount).length;
-            watingCount.setAttribute("text",count);
-        }
-        function setCount(member){
-            
-            if(member<watingNum){
-                return true;
-            }
-        }
-        
-         /*]]>*/
-    </script>
+    
 </head>
 <body>
 <h3 class="watingCount"></h3>
@@ -42,5 +17,34 @@
         <td th:text="${order.prise}"></td>
     </tr>
 </table>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    let channel=new WebSocket("ws://" + location.host + "/channel");
+    let watingNum='[[${watingNum}]]';
+    stompClient.publish({
+           destination:"/wating",
+       });
+   channel.onConnect=function(frame){
+       setConnected(true);
+       let PersonList=channel.subscribe("PersonList",setPersonNum);
+   }
+   function setPersonNum(message){
+       if(!message.indexof(watingNum)){
+           console,console.log('주문한 음식이 나왔습니다.');
+           return;
+       }
+       let watingCount=document.getElementsByClassName("watingCount");
+       let count= message.filer(setCount).length;
+       watingCount.setAttribute("text",count);
+   }
+   function setCount(member){
+       
+       if(member<watingNum){
+           return true;
+       }
+   }
+   
+    /*]]>*/
+</script>
 </body>
 </html>
